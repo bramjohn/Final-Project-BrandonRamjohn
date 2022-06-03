@@ -5,7 +5,7 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.get("/homepage", (req, res) => {
+app.get("/Homepage", (req, res) => {
   res.send("Hello World");
 });
 
