@@ -43,7 +43,36 @@ const getAllAds = async (req, res) => {
 
 //Endpoint handler that GETs a specific item from the MongoDB server based on its _id
 
-const getIndividualAd = async (req, res) => {};
+const getIndividualAd = async (req, res) => {
+  try {
+    const client = new MongoClient(MONGO_URI, options);
+    await client.connect();
+    const db = client.db("Project");
+    const { id } = parseInt(req.params);
+    // const itemId = Number(req.params.id);
+    console.log(typeof id, "This is itemId");
+
+    const data = await db
+      .collection("data")
+      .findOne({ _id: ObjectId(`${id}`) });
+
+    console.log(data, "this is req item");
+    data
+      ? res.status(200).json({
+          status: 200,
+          data: data,
+          message: "Successfully provided specific item data",
+        })
+      : res.status(400).json({
+          status: 400,
+          data: data,
+          message: "Item data not found",
+        });
+    client.close();
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 //Endpoint handler that GETs all companies from the MongoDB server
 
