@@ -33,17 +33,10 @@ const Filter = ({ setFilter }) => {
         <input
           type="radio"
           name="price"
-          value="250"
+          value="0"
           onChange={(e) => setFilter(e.target.value)}
         />
-        <label>More than 250$</label>
-        <input
-          type="radio"
-          name="price"
-          value="300"
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        <label>More than 300$</label>
+        <label>Reset</label>
       </form>
     </>
   );
