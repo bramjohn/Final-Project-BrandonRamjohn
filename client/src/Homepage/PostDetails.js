@@ -16,7 +16,6 @@ const PostDetails = () => {
       .then((res) => res.json())
       .then((data) => {
         setPostDetails(data.data);
-        console.log(data, "This is data");
       })
 
       .catch((error) => {

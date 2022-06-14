@@ -20,8 +20,7 @@ const { v4: uuidv4 } = require("uuid");
 
 const getAllPosts = async (req, res) => {
   const filter = req.query.filter;
-  console.log(filter, "filterr");
-  console.log(filter, "This is the filter");
+
   try {
     const client = new MongoClient(MONGO_URI, options);
     await client.connect();
@@ -36,7 +35,7 @@ const getAllPosts = async (req, res) => {
         return item.post.price > filter;
       });
     }
-    console.log(filteredArray, "this is the filtered array");
+
     result
       ? res.status(200).json({
           status: 200,
@@ -50,9 +49,7 @@ const getAllPosts = async (req, res) => {
         });
 
     client.close();
-  } catch (err) {
-    console.log(err);
-  }
+  } catch (err) {}
 };
 
 //Endpoint handler that GETs a specific item from the MongoDB server based on its _id
@@ -81,9 +78,7 @@ const getIndividualPost = async (req, res) => {
           message: "Item data not found",
         });
     client.close();
-  } catch (err) {
-    console.log(err.message);
-  }
+  } catch (err) {}
 };
 
 const createPost = async (req, res) => {

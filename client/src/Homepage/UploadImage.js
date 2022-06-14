@@ -24,7 +24,6 @@ const UploadImage = () => {
         );
         setImageData(response.data);
         setImgUrl(response.data.secure_url);
-        console.log(response.data);
       } catch (error) {
         console.error(error);
       }

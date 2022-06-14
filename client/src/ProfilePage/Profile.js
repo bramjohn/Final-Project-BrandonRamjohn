@@ -10,7 +10,6 @@ const Profile = () => {
   }
 
   if (isAuthenticated) {
-    console.log(user);
   }
 
   return (
