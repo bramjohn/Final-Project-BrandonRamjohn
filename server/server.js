@@ -4,12 +4,15 @@ const morgan = require("morgan");
 // const app = express();
 
 const {
-  getAllAds,
-  getIndividualAd,
-  // getAllCompanies,
-  // getIndividualCompany,
+  getAllPosts,
+  getIndividualPost,
   createPost,
+  deletePost,
 } = require("./endpointHandlers");
+
+const { createUser } = require("./handlers/users/createUser");
+const { getUser } = require("./handlers/users/getUser");
+const { updateUser } = require("./handlers/users/updateUser");
 
 const PORT = 8000;
 
@@ -31,11 +34,17 @@ express()
   .use(express.urlencoded({ extended: false }))
   .use("/", express.static(__dirname + "/"))
 
+  // ADS ENDPOINTS
   // get all ads
-  .get("/ads", getAllAds)
+  .get("/posts", getAllPosts)
   // get a specific item
-  .get("/ad/:id", getIndividualAd)
+  .get("/api/post-details/:id", getIndividualPost)
+  .post("/api/create-post", createPost)
+  .delete("/api/delete-post/:id", deletePost)
 
-  .post("/create-post", createPost)
+  // USERS ENDPOINTS
+  .post("/user", createUser)
+  .get("/user/:sub", getUser)
+  .patch("/user/:sub", updateUser)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));

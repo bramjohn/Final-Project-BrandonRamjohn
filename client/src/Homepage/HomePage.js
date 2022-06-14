@@ -1,46 +1,81 @@
 import styled from "styled-components";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
+
 import { UsersContext } from "../Context/UsersContext";
-import Profile from "../ProfilePage/Profile";
 import { Link } from "react-router-dom";
+
+import Filter from "./Filter";
+
 const HomePage = () => {
-  const { usersData, status } = useContext(UsersContext);
+  const { usersData, status, setFilter } = useContext(UsersContext);
 
   return (
     <>
-      <Wrapper>
-        <input type="text" placeholder="Find Work Now!" />
-        <button value="submit">Submit</button>
-      </Wrapper>
+      <Filter setFilter={setFilter} />
       <Title>Recent Posts</Title>
-      {usersData.map((data) => {
-        return (
-          <>
-            <PostWrapper>
-              <Link to={`/post-details/${data._id}`}>
-                <Img src={data.post.media.url} />
-                {data.post.title}
-                {data.post.description}
-                {data.post.title}
-              </Link>
-            </PostWrapper>
-          </>
-        );
-      })}
+      <DivWrapper>
+        {usersData.map((data) => {
+          return (
+            <>
+              <PostWrapper>
+                <Link2
+                  style={{ textDecoration: "none", color: "black" }}
+                  to={`/post-details/${data._id}`}
+                >
+                  <Img src={data.post.media.url} />
+                  <Div>
+                    <H1>{data.name}</H1>
+                    <H1>{data.post.name}</H1>
+
+                    <H2>{data.post.title}</H2>
+                    <P>Paying: {data.post.price}$</P>
+                  </Div>
+                </Link2>
+              </PostWrapper>
+            </>
+          );
+        })}
+      </DivWrapper>
     </>
   );
 };
-const Title = styled.div``;
-const Wrapper = styled.form``;
-const PostWrapper = styled.div`
+const Title = styled.span`
+  font-size: xx-large;
+`;
+const Link2 = styled(Link)`
   display: flex;
 `;
-const Img = styled.img`
+const Div = styled.div`
+  width: 400px;
+`;
+
+const DivWrapper = styled.div`
   display: flex;
-  max-width: 250px;
-  max-height: 250px;
-  border-radius: 50px;
+  flex-wrap: wrap;
+`;
+
+const PostWrapper = styled.div`
+  display: flex;
+  border: solid grey 3px;
+  margin: 10px;
+  max-width: 700px;
+`;
+const Img = styled.img`
+  width: 250px;
+  height: 250px;
   padding: 10px;
+`;
+
+const H1 = styled.p`
+  font-size: x-large;
+`;
+const H2 = styled.p`
+  color: green;
+  margin-top: 25px;
+`;
+const P = styled.p`
+  color: green;
+  margin-top: 50px;
 `;
 
 export default HomePage;

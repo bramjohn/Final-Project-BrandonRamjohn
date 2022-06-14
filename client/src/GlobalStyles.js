@@ -58,8 +58,8 @@ table {
 }
 
 button{
-    font-family: 'Didact Gothic', sans-serif;
-    margin-left: 5px;
+    
+   
 
 }
 

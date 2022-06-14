@@ -2,6 +2,7 @@
 
 "use strict";
 
+const { ObjectId } = require("mongodb");
 const { MongoClient } = require("mongodb");
 
 require("dotenv").config();
@@ -17,24 +18,37 @@ const { v4: uuidv4 } = require("uuid");
 
 //Endpoint handler that GETs all items from the MongoDB server
 
-const getAllAds = async (req, res) => {
+const getAllPosts = async (req, res) => {
+  const filter = req.query.filter;
+  console.log(filter, "filterr");
+  console.log(filter, "This is the filter");
   try {
     const client = new MongoClient(MONGO_URI, options);
     await client.connect();
     const db = client.db("Project");
-    const items = await db.collection("data").find().toArray();
-    console.log(items, "This is backend items");
-    items.length !== 0
+    let array = await db.collection("data").find().toArray();
+    let result;
+    let filteredArray;
+    if (filter === "reset") {
+      result = await db.collection("data").find().toArray();
+    } else {
+      filteredArray = array.filter((item) => {
+        return item.post.price > filter;
+      });
+    }
+    console.log(filteredArray, "this is the filtered array");
+    result
       ? res.status(200).json({
           status: 200,
-          data: items,
+          data: result,
           message: "Successfully provided item data",
         })
-      : res.status(400).json({
-          status: 400,
-          data: {},
-          message: "No item data available",
+      : res.status(200).json({
+          status: 200,
+          data: filteredArray,
+          message: "Successfully provided item data",
         });
+
     client.close();
   } catch (err) {
     console.log(err);
@@ -43,53 +57,92 @@ const getAllAds = async (req, res) => {
 
 //Endpoint handler that GETs a specific item from the MongoDB server based on its _id
 
-const getIndividualAd = async (req, res) => {
+const getIndividualPost = async (req, res) => {
   try {
     const client = new MongoClient(MONGO_URI, options);
     await client.connect();
     const db = client.db("Project");
-    const { id } = parseInt(req.params);
-    // const itemId = Number(req.params.id);
-    console.log(typeof id, "This is itemId");
 
-    const data = await db
+    const { id } = req.params;
+
+    const requestedItem = await db
       .collection("data")
-      .findOne({ _id: ObjectId(`${id}`) });
+      .findOne({ _id: ObjectId(id) });
 
-    console.log(data, "this is req item");
-    data
+    requestedItem
       ? res.status(200).json({
           status: 200,
-          data: data,
+          data: requestedItem,
           message: "Successfully provided specific item data",
         })
       : res.status(400).json({
           status: 400,
-          data: data,
+          data: requestedItem,
           message: "Item data not found",
         });
     client.close();
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
   }
 };
 
-//Endpoint handler that GETs all companies from the MongoDB server
+const createPost = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  await client.connect();
+  const db = client.db("Project");
 
-// const getAllCompanies = async (req, res) => {};
+  try {
+    const result = await db.collection("data").insertOne(req.body);
 
-//Endpoint handler that GETs a specific company from the MongoDB server based on its _id
+    if (result.acknowledged) {
+      res.status(201).json({ status: 201, data: result });
+    } else {
+      res.status(401).json({
+        status: 401,
+        message: "Unable to add reservation to database.",
+      });
+    }
+  } catch (err) {
+    res
+      .status(500)
+      .json({ status: 500, message: "Server Error addReservation" });
+  } finally {
+    client.close();
+  }
+};
 
-// const getIndividualCompany = async (req, res) => {};
+const deletePost = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  await client.connect();
+  const db = client.db("Project");
 
-//Endpoint handler used in POST requests to purchase items.  The stock/cart quantites are validated on both the front and back end.  If the validation fails on the back end, a 400 response will be sent.  If the purchase is successful, the requested quantity of each item will be decremented from the respective item in MongoDB.
+  const { id } = req.params;
 
-const createPost = async (req, res) => {};
+  try {
+    const result = await db.collection("data").deleteOne({ _id: ObjectId(id) });
+
+    if (result.acknowledged) {
+      res
+        .status(200)
+        .json({ status: 200, data: result, message: "Post Deleted" });
+    } else {
+      res.status(401).json({
+        status: 401,
+        message: "Unable To Delete",
+      });
+    }
+  } catch (err) {
+    res
+      .status(500)
+      .json({ status: 500, message: "Server Error, Unable to Delete " });
+  } finally {
+    client.close();
+  }
+};
 
 module.exports = {
-  getAllAds,
-  getIndividualAd,
-  // getAllCompanies,
-  // getIndividualCompany,
+  getAllPosts,
+  getIndividualPost,
   createPost,
+  deletePost,
 };
