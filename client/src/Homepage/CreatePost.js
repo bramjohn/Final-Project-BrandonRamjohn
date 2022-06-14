@@ -47,7 +47,6 @@ const CreatePost = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.status === 201) {
-          console.log(data, "This is the data");
           navigate(`/homepage`, { replace: true });
           window.location.reload();
         }
