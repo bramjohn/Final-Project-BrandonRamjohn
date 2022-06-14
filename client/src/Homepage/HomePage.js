@@ -67,10 +67,13 @@ const Img = styled.img`
 `;
 
 const H1 = styled.p`
+  font-style: oblique;
   font-size: x-large;
 `;
 const H2 = styled.p`
-  color: green;
+  color: black;
+  font-size: large;
+  font-weight: 600;
   margin-top: 25px;
 `;
 const P = styled.p`

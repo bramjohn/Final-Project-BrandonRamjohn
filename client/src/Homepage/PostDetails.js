@@ -130,6 +130,7 @@ const Pdetails = styled.p`
   font-size: 20px;
   max-width: 450px;
   margin-left: 10px;
+  margin-top: 10px;
 `;
 
 const Pdate = styled.p`
