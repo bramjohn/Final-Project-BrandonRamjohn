@@ -7,27 +7,30 @@ export const UsersContextProvider = ({ children }) => {
   //***********GENERAL DATA****************//
   const [usersData, setUsersData] = useState([]);
   const [status, setStatus] = useState("loading");
+  const [filter, setFilter] = useState("reset");
+  const [imgUrl, setImgUrl] = useState();
 
   useEffect(() => {
-    fetch(`/ads`)
+    fetch(`/posts?filter=${filter}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data, "This is data");
-        setUsersData(data.data);
+        setUsersData(data.data.reverse());
         setStatus("idle");
-        console.log(usersData);
       })
 
       .catch((error) => {
         console.error("Error:", error);
       });
-  }, []);
+  }, [filter]);
 
   return (
     <UsersContext.Provider
       value={{
         usersData,
         status,
+        setFilter,
+        imgUrl,
+        setImgUrl,
       }}
     >
       {children}
