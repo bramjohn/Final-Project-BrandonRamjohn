@@ -69,10 +69,10 @@ const CreatePost = () => {
         >
           <Input
             type="text"
-            attribute="autoFocus"
             placeholder="Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            autoFocus
           ></Input>
           <Input
             type="text"

@@ -9,11 +9,11 @@ const NavBar = () => {
     <>
       <Wrapper>
         <Logo />
-
-        <SignIn />
-
-        <Post />
-        <ProfileButton />
+        <Div>
+          <SignIn />
+          <Post />
+          <ProfileButton />
+        </Div>
       </Wrapper>
     </>
   );
@@ -21,9 +21,14 @@ const NavBar = () => {
 
 const Wrapper = styled.div`
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-end;
   background-color: black;
   padding: 20px;
 `;
 
+const Div = styled.div`
+  display: flex;
+  gap: 30px;
+  margin-right: 10px;
+`;
 export default NavBar;
