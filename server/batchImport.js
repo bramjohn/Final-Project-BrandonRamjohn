@@ -28,3 +28,5 @@ const batchImport = async (req, res) => {
 };
 
 batchImport();
+
+// Everything is functioning again. excellent
